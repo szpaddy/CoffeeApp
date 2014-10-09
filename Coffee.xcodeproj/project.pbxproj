@@ -8,10 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		241306FE7F52790E55B71F2D /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 50102559BEE0249B73FAFC03 /* libPods.a */; };
+		5D09B09219E737DC00B28899 /* CoffeeCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D09B09119E737DC00B28899 /* CoffeeCard.m */; };
 		5D4EBD5619E7148400B18677 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D4EBD5519E7148400B18677 /* main.m */; };
 		5D4EBD5919E7148400B18677 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D4EBD5819E7148400B18677 /* AppDelegate.m */; };
 		5D4EBD5C19E7148400B18677 /* Coffee.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5D4EBD5A19E7148400B18677 /* Coffee.xcdatamodeld */; };
-		5D4EBD5F19E7148400B18677 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D4EBD5E19E7148400B18677 /* ViewController.m */; };
+		5D4EBD5F19E7148400B18677 /* CoffeeListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D4EBD5E19E7148400B18677 /* CoffeeListTableViewController.m */; };
 		5D4EBD6219E7148400B18677 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5D4EBD6019E7148400B18677 /* Main.storyboard */; };
 		5D4EBD6419E7148400B18677 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5D4EBD6319E7148400B18677 /* Images.xcassets */; };
 		5D4EBD6719E7148400B18677 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5D4EBD6519E7148400B18677 /* LaunchScreen.xib */; };
@@ -33,14 +34,16 @@
 		079E47238AFD924984ECFE51 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		0AA67A7BCBB9B09121A7643F /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		50102559BEE0249B73FAFC03 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		5D09B09019E737DC00B28899 /* CoffeeCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoffeeCard.h; sourceTree = "<group>"; };
+		5D09B09119E737DC00B28899 /* CoffeeCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoffeeCard.m; sourceTree = "<group>"; };
 		5D4EBD5019E7148400B18677 /* Coffee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Coffee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D4EBD5419E7148400B18677 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5D4EBD5519E7148400B18677 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5D4EBD5719E7148400B18677 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5D4EBD5819E7148400B18677 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		5D4EBD5B19E7148400B18677 /* Coffee.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Coffee.xcdatamodel; sourceTree = "<group>"; };
-		5D4EBD5D19E7148400B18677 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		5D4EBD5E19E7148400B18677 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		5D4EBD5D19E7148400B18677 /* CoffeeListTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoffeeListTableViewController.h; sourceTree = "<group>"; };
+		5D4EBD5E19E7148400B18677 /* CoffeeListTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoffeeListTableViewController.m; sourceTree = "<group>"; };
 		5D4EBD6119E7148400B18677 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5D4EBD6319E7148400B18677 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		5D4EBD6619E7148400B18677 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -102,12 +105,14 @@
 			children = (
 				5D4EBD5719E7148400B18677 /* AppDelegate.h */,
 				5D4EBD5819E7148400B18677 /* AppDelegate.m */,
-				5D4EBD5D19E7148400B18677 /* ViewController.h */,
-				5D4EBD5E19E7148400B18677 /* ViewController.m */,
+				5D4EBD5D19E7148400B18677 /* CoffeeListTableViewController.h */,
+				5D4EBD5E19E7148400B18677 /* CoffeeListTableViewController.m */,
 				5D4EBD6019E7148400B18677 /* Main.storyboard */,
 				5D4EBD6319E7148400B18677 /* Images.xcassets */,
 				5D4EBD6519E7148400B18677 /* LaunchScreen.xib */,
 				5D4EBD5A19E7148400B18677 /* Coffee.xcdatamodeld */,
+				5D09B09019E737DC00B28899 /* CoffeeCard.h */,
+				5D09B09119E737DC00B28899 /* CoffeeCard.m */,
 				5D4EBD5319E7148400B18677 /* Supporting Files */,
 			);
 			path = Coffee;
@@ -316,8 +321,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				5D4EBD5919E7148400B18677 /* AppDelegate.m in Sources */,
+				5D09B09219E737DC00B28899 /* CoffeeCard.m in Sources */,
 				5D4EBD5C19E7148400B18677 /* Coffee.xcdatamodeld in Sources */,
-				5D4EBD5F19E7148400B18677 /* ViewController.m in Sources */,
+				5D4EBD5F19E7148400B18677 /* CoffeeListTableViewController.m in Sources */,
 				5D4EBD5619E7148400B18677 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

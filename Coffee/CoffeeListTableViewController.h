@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  CoffeeListTableViewController.h
 //  Coffee
 //
 //  Created by Robert Blafford on 10/9/14.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface CoffeeListTableViewController : UITableViewController
 
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "CoffeeListTableViewController.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:[[CoffeeListTableViewController alloc] init]];
+    self.window.rootViewController = navigationController;
+    
     return YES;
 }
 
