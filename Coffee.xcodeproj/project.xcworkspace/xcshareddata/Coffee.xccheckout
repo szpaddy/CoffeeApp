@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>B6D88BB8-33B1-43D1-90CD-843C2ACEC3F2</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Coffee</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>E44C7F494AB6F713E6CD83E50F0A51C0A628865B</key>
+		<string>https://github.com/rblafford/CoffeeApp.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Coffee.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>E44C7F494AB6F713E6CD83E50F0A51C0A628865B</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/rblafford/CoffeeApp.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>E44C7F494AB6F713E6CD83E50F0A51C0A628865B</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E44C7F494AB6F713E6CD83E50F0A51C0A628865B</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Coffee</string>
+		</dict>
+	</array>
+</dict>
+</plist>
