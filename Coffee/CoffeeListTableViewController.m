@@ -52,6 +52,15 @@
     }];
 }
 
+- (UIImage *)imageWithImage:(UIImage *)image convertToSize:(CGSize)size
+{
+    UIGraphicsBeginImageContext(size);
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage *destImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return destImage;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -59,6 +68,16 @@
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(loadCoffeeRecipies) forControlEvents:UIControlEventValueChanged];
     self.refreshControl = refreshControl;
+ 
+    UIImageView *logoImageView = [[UIImageView alloc] initWithImage:[self imageWithImage:[UIImage imageNamed:@"drip.png"] convertToSize:CGSizeMake(70, 70)]];
+    self.navigationItem.titleView = logoImageView;
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Test" style:UIBarButtonItemStylePlain target:self action:@selector(test)];
+}
+
+- (void)test
+{
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -67,12 +86,13 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+- (void)configureCell:(CoffeeListTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = [object valueForKey:@"name"];
     cell.detailTextLabel.text = [object valueForKey:@"desc"];
-    [cell.imageView setImageWithURL:[NSURL URLWithString:[object valueForKey:@"image_url"]]];
+    cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Logo.png"]];
+    [cell.imageView setImageWithURL:[NSURL URLWithString:[object valueForKey:@"image_url"]] placeholderImage:[UIImage imageNamed:@"Logo.png"]];
 }
 
 #pragma mark - UITableViewDataSource
@@ -90,8 +110,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView registerClass:[CoffeeListTableViewCell class] forCellReuseIdentifier:@"CoffeeCardCellIdentifier"];
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CoffeeCardCellIdentifier" forIndexPath:indexPath];
+    static NSString *CellIdentifier = @"CoffeeCardCellIdentifier";
+    
+    [tableView registerClass:[CoffeeListTableViewCell class] forCellReuseIdentifier:CellIdentifier];
+    CoffeeListTableViewCell *cell = (CoffeeListTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
 }
@@ -186,7 +208,7 @@
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [self configureCell:[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+            [self configureCell:(CoffeeListTableViewCell*)[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
             break;
             
         case NSFetchedResultsChangeMove:

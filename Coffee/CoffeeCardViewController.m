@@ -38,8 +38,9 @@
     [shareButton setTitle:@"Share" forState:UIControlStateNormal];
     [shareButton addTarget:self action:@selector(shareSelected:) forControlEvents:UIControlEventTouchDown];
     
-    UIBarButtonItem *shareBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
-    self.navigationItem.rightBarButtonItem = shareBarButtonItem;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+
 }
 
 - (void)viewDidLayoutSubviews

@@ -8,15 +8,39 @@
 
 #import "CoffeeListTableViewCell.h"
 
+@interface CoffeeListTableViewCell ()
+
+
+@end
+
 @implementation CoffeeListTableViewCell
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        [self setupCell];
+    }
+    return self;
+}
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier];
+    if (self) {
+        [self setupCell];
+    }
+    return self;
+}
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
+}
+
+- (void)setupCell
+{
     
-//    CGRect imageFrame = self.imageView.frame;
-//    imageFrame.origin = self.center;
-//    self.imageView.frame = imageFrame;
 }
 
 @end

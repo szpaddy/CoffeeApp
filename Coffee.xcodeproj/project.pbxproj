@@ -11,6 +11,8 @@
 		5D0952D519E7576700419D29 /* CoffeeCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D0952D419E7576700419D29 /* CoffeeCardViewController.m */; };
 		5D0952D819E76FE800419D29 /* CoffeeListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D0952D719E76FE800419D29 /* CoffeeListTableViewCell.m */; };
 		5D09B09219E737DC00B28899 /* CoffeeCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D09B09119E737DC00B28899 /* CoffeeCard.m */; };
+		5D3CF2A419E799910052B1B3 /* drip.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D3CF2A319E799910052B1B3 /* drip.png */; };
+		5D3CF2A619E79A8E0052B1B3 /* drip2.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D3CF2A519E79A8E0052B1B3 /* drip2.png */; };
 		5D4EBD5619E7148400B18677 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D4EBD5519E7148400B18677 /* main.m */; };
 		5D4EBD5919E7148400B18677 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D4EBD5819E7148400B18677 /* AppDelegate.m */; };
 		5D4EBD5C19E7148400B18677 /* Coffee.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5D4EBD5A19E7148400B18677 /* Coffee.xcdatamodeld */; };
@@ -19,6 +21,7 @@
 		5D4EBD6419E7148400B18677 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5D4EBD6319E7148400B18677 /* Images.xcassets */; };
 		5D4EBD6719E7148400B18677 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5D4EBD6519E7148400B18677 /* LaunchScreen.xib */; };
 		5D4EBD7319E7148400B18677 /* CoffeeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D4EBD7219E7148400B18677 /* CoffeeTests.m */; };
+		5DA24B3D19E79F540021CF00 /* CoffeeLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DA24B3C19E79F540021CF00 /* CoffeeLogo.png */; };
 		7387E908E88D67A6D241DD06 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 50102559BEE0249B73FAFC03 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +45,8 @@
 		5D0952D719E76FE800419D29 /* CoffeeListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoffeeListTableViewCell.m; sourceTree = "<group>"; };
 		5D09B09019E737DC00B28899 /* CoffeeCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoffeeCard.h; sourceTree = "<group>"; };
 		5D09B09119E737DC00B28899 /* CoffeeCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoffeeCard.m; sourceTree = "<group>"; };
+		5D3CF2A319E799910052B1B3 /* drip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drip.png; sourceTree = "<group>"; };
+		5D3CF2A519E79A8E0052B1B3 /* drip2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drip2.png; sourceTree = "<group>"; };
 		5D4EBD5019E7148400B18677 /* Coffee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Coffee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D4EBD5419E7148400B18677 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5D4EBD5519E7148400B18677 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -56,6 +61,7 @@
 		5D4EBD6C19E7148400B18677 /* CoffeeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoffeeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D4EBD7119E7148400B18677 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5D4EBD7219E7148400B18677 /* CoffeeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoffeeTests.m; sourceTree = "<group>"; };
+		5DA24B3C19E79F540021CF00 /* CoffeeLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CoffeeLogo.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +115,9 @@
 		5D4EBD5219E7148400B18677 /* Coffee */ = {
 			isa = PBXGroup;
 			children = (
+				5D3CF2A319E799910052B1B3 /* drip.png */,
+				5D3CF2A519E79A8E0052B1B3 /* drip2.png */,
+				5DA24B3C19E79F540021CF00 /* CoffeeLogo.png */,
 				5D4EBD5719E7148400B18677 /* AppDelegate.h */,
 				5D4EBD5819E7148400B18677 /* AppDelegate.m */,
 				5D4EBD5D19E7148400B18677 /* CoffeeListTableViewController.h */,
@@ -247,8 +256,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5DA24B3D19E79F540021CF00 /* CoffeeLogo.png in Resources */,
 				5D4EBD6219E7148400B18677 /* Main.storyboard in Resources */,
 				5D4EBD6719E7148400B18677 /* LaunchScreen.xib in Resources */,
+				5D3CF2A619E79A8E0052B1B3 /* drip2.png in Resources */,
+				5D3CF2A419E799910052B1B3 /* drip.png in Resources */,
 				5D4EBD6419E7148400B18677 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
