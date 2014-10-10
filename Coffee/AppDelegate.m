@@ -19,7 +19,12 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:[[CoffeeListTableViewController alloc] init]];
+    CoffeeListTableViewController *tvc = [[CoffeeListTableViewController alloc] init];
+    tvc.managedObjectContext = self.managedObjectContext;
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tvc];
+    navigationController.navigationBar.translucent = NO;
+    navigationController.navigationBar.barTintColor = [UIColor colorWithRed:0.949 green:0.305 blue:0.0705 alpha:0.0];
     self.window.rootViewController = navigationController;
     
     return YES;
