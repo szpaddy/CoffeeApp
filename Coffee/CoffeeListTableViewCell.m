@@ -10,7 +10,6 @@
 
 @interface CoffeeListTableViewCell ()
 
-
 @end
 
 @implementation CoffeeListTableViewCell
@@ -40,7 +39,19 @@
 
 - (void)setupCell
 {
-    
+//    self.imageView.image = [UIImage imageNamed:@"Logo.png"];
+//
+//    UILabel *textLabel = self.textLabel;
+//    UILabel *detailTextLabel = self.detailTextLabel;
+//    UIImageView *imageView = self.imageView;
+//    
+//    textLabel.translatesAutoresizingMaskIntoConstraints = NO;
+//    detailTextLabel.translatesAutoresizingMaskIntoConstraints = NO;
+//    imageView.translatesAutoresizingMaskIntoConstraints = NO;
+//
+//    NSDictionary *views = NSDictionaryOfVariableBindings(textLabel, detailTextLabel, imageView);
+//    NSArray *constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[textLabel]-[detailTextLabel]-[imageView]-|" options:0 metrics:nil views:views];
+//    [self addConstraints:constraints];
 }
 
 @end

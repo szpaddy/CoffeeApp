@@ -9,9 +9,8 @@
 #import "CoffeeListTableViewController.h"
 #import "CoffeeListTableViewCell.h"
 #import <AFNetworking/AFNetworking.h>
-#import <UIImageView+AFNetworking.h>
 #import "CoffeeCardViewController.h"
-#import "CoffeeCard.h"
+#import "CoffeeCard+Utility.h"
 
 @interface CoffeeListTableViewController ()
 
@@ -26,27 +25,9 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager.requestSerializer setValue:@"WuVbkuUsCXHPx3hsQzus4SE" forHTTPHeaderField:@"Authorization"];
     [manager GET:@"https://coffeeapi.percolate.com/api/coffee/" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [(NSArray *)responseObject enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"CoffeeCard"];
-            request.predicate = [NSPredicate predicateWithFormat:@"id = %@", obj[@"id"]];
-            
-            NSError *error = nil;
-            NSArray *matches = [weakSelf.managedObjectContext executeFetchRequest:request error:&error];
-            
-            if ([matches count] == 0)
-            {
-                NSManagedObject *coffeeCard = [NSEntityDescription insertNewObjectForEntityForName:@"CoffeeCard" inManagedObjectContext:weakSelf.managedObjectContext];
-                [coffeeCard setValue:obj[@"name"] forKey:@"name"];
-                [coffeeCard setValue:obj[@"id"] forKey:@"id"];
-                [coffeeCard setValue:obj[@"image_url"] forKey:@"image_url"];
-                [coffeeCard setValue:obj[@"desc"] forKey:@"desc"];
-            }
+        [(NSArray *)responseObject enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {            
+            [CoffeeCard coffeeCardWithInfo:obj inManagedObjectContext:weakSelf.managedObjectContext];
         }];
-        NSError *error;
-        if (![weakSelf.managedObjectContext save:&error]) {
-            NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
-        }
-        [self.refreshControl endRefreshing];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
@@ -65,19 +46,19 @@
 {
     [super viewDidLoad];
     
-    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-    [refreshControl addTarget:self action:@selector(loadCoffeeRecipies) forControlEvents:UIControlEventValueChanged];
-    self.refreshControl = refreshControl;
- 
-    UIImageView *logoImageView = [[UIImageView alloc] initWithImage:[self imageWithImage:[UIImage imageNamed:@"drip.png"] convertToSize:CGSizeMake(70, 70)]];
-    self.navigationItem.titleView = logoImageView;
+    [self loadCoffeeRecipies];
     
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[self imageWithImage:[UIImage imageNamed:@"drip.png"] convertToSize:CGSizeMake(70, 70)]];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Test" style:UIBarButtonItemStylePlain target:self action:@selector(test)];
 }
 
 - (void)test
 {
     [self.tableView reloadData];
+    
+//    NSDictionary *obj = @{ @"id" : @"decaf" };
+//    CoffeeCard *card = [CoffeeCard coffeeCardWithInfo:obj inManagedObjectContext:self.managedObjectContext];
+//    card.name = @"asdf";
 }
 
 - (void)didReceiveMemoryWarning
@@ -88,11 +69,11 @@
 
 - (void)configureCell:(CoffeeListTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = [object valueForKey:@"name"];
-    cell.detailTextLabel.text = [object valueForKey:@"desc"];
-    cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Logo.png"]];
-    [cell.imageView setImageWithURL:[NSURL URLWithString:[object valueForKey:@"image_url"]] placeholderImage:[UIImage imageNamed:@"Logo.png"]];
+    CoffeeCard *object = (CoffeeCard*)[self.fetchedResultsController objectAtIndexPath:indexPath];
+    cell.textLabel.text = object.name;
+    cell.detailTextLabel.text = object.desc;
+    //cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Logo.png"]];
+    cell.imageView.image = [UIImage imageWithData:object.imageData];
 }
 
 #pragma mark - UITableViewDataSource
@@ -127,9 +108,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+    CoffeeCard *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
     CoffeeCardViewController *coffeeDetailViewController = [[CoffeeCardViewController alloc] init];
-    coffeeDetailViewController.card = (CoffeeCard*)object;
+    coffeeDetailViewController.coffeeItem = object;
     
     [self.navigationController pushViewController:coffeeDetailViewController animated:YES];
 }
@@ -178,20 +159,6 @@
     [self.tableView beginUpdates];
 }
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
-           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
-{
-    switch(type) {
-        case NSFetchedResultsChangeInsert:
-            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeDelete:
-            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-    }
-}
-
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
        atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
       newIndexPath:(NSIndexPath *)newIndexPath
@@ -208,7 +175,8 @@
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [self configureCell:(CoffeeListTableViewCell*)[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+            //[self configureCell:(CoffeeListTableViewCell*)[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
             
         case NSFetchedResultsChangeMove:

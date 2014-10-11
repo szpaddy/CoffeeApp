@@ -12,6 +12,6 @@
 
 @interface CoffeeCardViewController : UIViewController
 
-@property (nonatomic, strong) CoffeeCard *card;
+@property (nonatomic, strong) CoffeeCard *coffeeItem;
 
 @end

@@ -2,7 +2,7 @@
 //  CoffeeCard.h
 //  Coffee
 //
-//  Created by Robert Blafford on 10/9/14.
+//  Created by Robert Blafford on 10/10/14.
 //  Copyright (c) 2014 Robert Blafford. All rights reserved.
 //
 
@@ -16,5 +16,6 @@
 @property (nonatomic, retain) NSString * id;
 @property (nonatomic, retain) NSString * image_url;
 @property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSData * imageData;
 
 @end
