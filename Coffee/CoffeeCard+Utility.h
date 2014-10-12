@@ -8,6 +8,11 @@
 
 #import "CoffeeCard.h"
 
+NSString * const CoffeeItemUniqueIdentifier;
+NSString * const CoffeeItemNameString;
+NSString * const CoffeeItemImageUrlString;
+NSString * const CoffeeItemDescriptionString;
+
 @interface CoffeeCard (Utility)
 
 + (CoffeeCard*)coffeeCardWithInfo:(NSDictionary*)coffeeInfo inManagedObjectContext:(NSManagedObjectContext*)context;

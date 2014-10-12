@@ -8,6 +8,11 @@
 
 #import "CoffeeCard+Utility.h"
 
+NSString * const CoffeeItemUniqueIdentifier = @"id";
+NSString * const CoffeeItemNameString = @"name";
+NSString * const CoffeeItemImageUrlString = @"image_url";
+NSString * const CoffeeItemDescriptionString = @"desc";
+
 @implementation CoffeeCard (Utility)
 
 + (CoffeeCard*)coffeeCardWithInfo:(NSDictionary*)coffeeInfo inManagedObjectContext:(NSManagedObjectContext*)context
@@ -15,7 +20,7 @@
     CoffeeCard *coffeeCard = nil;
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"CoffeeCard"];
-    request.predicate = [NSPredicate predicateWithFormat:@"id = %@", coffeeInfo[@"id"]];
+    request.predicate = [NSPredicate predicateWithFormat:@"id = %@", coffeeInfo[CoffeeItemUniqueIdentifier]];
     
     NSError *error = nil;
     NSArray *matches = [context executeFetchRequest:request error:&error];
@@ -27,10 +32,10 @@
     else if ([matches count] == 0)
     {
         coffeeCard = [NSEntityDescription insertNewObjectForEntityForName:@"CoffeeCard" inManagedObjectContext:context];
-        coffeeCard.name = coffeeInfo[@"name"];
-        coffeeCard.id = coffeeInfo[@"id"];
-        coffeeCard.image_url = coffeeInfo[@"image_url"];
-        coffeeCard.desc = coffeeInfo[@"desc"];
+        coffeeCard.name = coffeeInfo[CoffeeItemNameString];
+        coffeeCard.id = coffeeInfo[CoffeeItemUniqueIdentifier];
+        coffeeCard.image_url = coffeeInfo[CoffeeItemImageUrlString];
+        coffeeCard.desc = coffeeInfo[CoffeeItemDescriptionString];
     }
 
     return coffeeCard;

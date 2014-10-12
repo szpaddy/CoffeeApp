@@ -44,6 +44,7 @@
     [self addObserver:self forKeyPath:@"image_url" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:NULL];
 }
 
+// When the image_url changes asynchronously start a new download for the image
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if ([keyPath isEqualToString:@"image_url"])

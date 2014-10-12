@@ -27,7 +27,6 @@
     navigationController.navigationBar.barTintColor = [UIColor colorWithRed:0.949 green:0.4 blue:0.13 alpha:0.0];
     
     self.window.rootViewController = navigationController;
-    [self.window makeKeyAndVisible];
     
     return YES;
 }
@@ -40,6 +39,7 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    [self saveContext];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {

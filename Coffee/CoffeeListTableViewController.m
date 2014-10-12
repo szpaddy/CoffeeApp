@@ -8,15 +8,15 @@
 
 #import "CoffeeListTableViewController.h"
 #import "CoffeeListTableViewCell.h"
-#import <AFNetworking/AFNetworking.h>
 #import "CoffeeCardViewController.h"
 #import "CoffeeCard+Utility.h"
+#import <AFNetworking/AFHTTPRequestOperationManager.h>
 
 static NSString *CellIdentifier = @"CoffeeCardCellIdentifier";
 
 @interface CoffeeListTableViewController ()
 
-@property (nonatomic, strong) CoffeeListTableViewCell *dummyCell;
+@property (nonatomic, strong) CoffeeListTableViewCell *dummyCell; // Use this cell to calculate the height of a cell
 
 @end
 
@@ -50,18 +50,12 @@ static NSString *CellIdentifier = @"CoffeeCardCellIdentifier";
 {
     [super viewDidLoad];
     
-    [self loadCoffeeRecipies];
+    //[self loadCoffeeRecipies];
 
     [self.tableView registerClass:[CoffeeListTableViewCell class] forCellReuseIdentifier:CellIdentifier];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[self imageWithImage:[UIImage imageNamed:@"drip.png"] convertToSize:CGSizeMake(70, 70)]];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Test" style:UIBarButtonItemStylePlain target:self action:@selector(test)];
-}
-
-- (void)test
-{
-    [self.tableView reloadData];
 }
 
 - (void)configureCell:(CoffeeListTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
@@ -89,6 +83,8 @@ static NSString *CellIdentifier = @"CoffeeCardCellIdentifier";
 {
     CoffeeListTableViewCell *cell = (CoffeeListTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
+
+    // Make sure autolayout constraints are applied before cell is drawn to table for its first time
     [cell setNeedsUpdateConstraints];
     [cell updateConstraintsIfNeeded];
     
@@ -101,7 +97,7 @@ static NSString *CellIdentifier = @"CoffeeCardCellIdentifier";
 {
     CoffeeCard *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
-    // Fill the dummy cell just like the one at indexpath would appear so we can calulate the proper cell height
+    // Fill the dummy cell just like the one at indexpath would appear as so I can calulate the proper cell height
     if (!self.dummyCell)
         self.dummyCell = [[CoffeeListTableViewCell alloc] init];
 
@@ -109,6 +105,8 @@ static NSString *CellIdentifier = @"CoffeeCardCellIdentifier";
     self.dummyCell.detailTextLabel.text = object.desc;
     self.dummyCell.imageView.image = [UIImage imageWithData:object.imageData];
 
+    // Found the following advice from http://stackoverflow.com/questions/18746929/using-auto-layout-in-uitableview-for-dynamic-cell-layouts-variable-row-heights
+    
     // Force the content to layout with custom constraints created in updateConstraints
     [self.dummyCell setNeedsUpdateConstraints];
     [self.dummyCell updateConstraintsIfNeeded];
@@ -162,7 +160,7 @@ static NSString *CellIdentifier = @"CoffeeCardCellIdentifier";
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:CoffeeItemNameString ascending:NO];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
@@ -183,51 +181,12 @@ static NSString *CellIdentifier = @"CoffeeCardCellIdentifier";
     
     return _fetchedResultsController;
 }
-/*
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
-{
-    [self.tableView beginUpdates];
-}
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
-       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
-      newIndexPath:(NSIndexPath *)newIndexPath
-{
-    UITableView *tableView = self.tableView;
-    
-    switch(type) {
-        case NSFetchedResultsChangeInsert:
-            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeDelete:
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeUpdate:
-            [self configureCell:(CoffeeListTableViewCell*)[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
-            //[self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeMove:
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-    }
-}
-
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
-    [self.tableView endUpdates];
-}*/
-
-
- // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed.
- 
+// Choosing to implement this method instead of the controllerDidBegin/End changes methods due to the fact that many asynchronously downloaded coffee images will update their respective models during a short period of time. Each change will trigger the fetched results controller to ask its delegate to refresh the content.
  - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
  {
- // In the simplest, most efficient, case, reload the table view.
- [self.tableView reloadData];
+     // In the simplest, most efficient, case, reload the table view.
+     [self.tableView reloadData];
  }
 
 
