@@ -46,33 +46,12 @@
 
 @implementation CoffeeCardViewController
 
-- (void)loadCoffeeItemDetail
-{
-    [self.activityIndicator startAnimating];
-    
-    __weak CoffeeCardViewController *weakSelf = self;
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager.requestSerializer setValue:@"WuVbkuUsCXHPx3hsQzus4SE" forHTTPHeaderField:@"Authorization"];
-    [manager GET:[NSString stringWithFormat:@"https://coffeeapi.percolate.com/api/coffee/%@", weakSelf.coffeeItem.id] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        weakSelf.itemDescription.text = responseObject[@"desc"];
-        
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
-        [dateFormatter setLocale:[NSLocale currentLocale]];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+#pragma mark - View lifecycle 
 
-        // Example Date: 2014-10-04 01:44:49.285430
-        NSString *dateString = responseObject[@"last_updated_at"];
-        NSRange rangeForChar = [dateString rangeOfString:@"."];
-        dateString = (rangeForChar.location != NSNotFound) ? [dateString substringToIndex:rangeForChar.location] : dateString;
-        
-        weakSelf.lastUpdated.text = [[dateFormatter dateFromString:dateString] lastUpdatedString];
-        
-        [weakSelf.activityIndicator stopAnimating];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Failed to make detailed request for coffee entity");
-    }];
+- (void)loadView
+{
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
+    self.view = scrollView;
 }
 
 - (void)viewDidLoad
@@ -108,6 +87,7 @@
     
     UIImageView *imageView = [[UIImageView alloc] init];
     imageView.translatesAutoresizingMaskIntoConstraints = NO;
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
     imageView.image = [UIImage imageWithData:self.coffeeItem.imageData];
     [self.view addSubview:imageView];
     
@@ -116,21 +96,32 @@
     [self.view addSubview:self.activityIndicator];
     
     // Auto Layout subviews
+
+    // When using UIViewContentModeScaleAspectFit the imageView will attempt to scale the image until its biggest side sits flush with the target area
+    // Therefore empty space will be applied to either the side or top, lets use the imageHeight variable to tell the autoLayout system to perfectly size the image. The result is that the image will have a fixed with, be scaled correctly, and not appear so be shifted to the right or lower then expected.
+    CGFloat width = (CGRectGetWidth(self.view.bounds) - 30.0);
+    CGFloat scale = width/imageView.image.size.width;
+    CGFloat imageHeight = (imageView.image) ? imageView.image.size.height * scale : 0;
+
     NSDictionary *views = NSDictionaryOfVariableBindings(title, line, description, imageView, lastUpdated);
-    NSDictionary *metrics = @{ @"imageEdge" : @200.0, @"padding" : @15.0, @"lineWidth" : @((CGRectGetWidth(self.view.bounds) - 15.0)), @"lineHeight" : @2 };
+    NSDictionary *metrics = @{ @"padding" : @15.0,
+                               @"width" : @(width),
+                               @"imageHeight" : @(imageHeight),
+                               @"lineWidth" : @((CGRectGetWidth(self.view.bounds) - 15.0)),
+                               @"lineThickness" : @2 };
 
     // All subviews should be padding px away from the left edge of the superview
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[title]" options:NSLayoutFormatAlignAllLeft metrics:metrics views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[title(width)]" options:NSLayoutFormatAlignAllLeft metrics:metrics views:views]];
 
     // Set line to be line width px wide and lineHeight px high
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[line(lineWidth)]" options:NSLayoutFormatAlignAllLeft metrics:metrics views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[description]" options:NSLayoutFormatAlignAllLeft metrics:metrics views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[description(width)]" options:NSLayoutFormatAlignAllLeft metrics:metrics views:views]];
     
     // Set imageView tobe <=imageEdge in length and height, so if imageView.image == nil then the lastUpdated uilabel will shift up to be underneath the description label
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[imageView(<=imageEdge)]" options:NSLayoutFormatAlignAllLeft metrics:metrics views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[imageView(<=width)]" options:NSLayoutFormatAlignAllLeft metrics:metrics views:views]];
     
     // Vertically align all components one after the other with padding px as the space between them.
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-padding-[title]-padding-[line(lineHeight)]-padding-[description]-padding-[imageView(<=imageEdge)]-padding-[lastUpdated]" options:NSLayoutFormatAlignAllLeft metrics:metrics views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-padding-[title]-padding-[line(lineThickness)]-padding-[description]-padding-[imageView(imageHeight)]-padding-[lastUpdated]" options:NSLayoutFormatAlignAllLeft metrics:metrics views:views]];
     
     self.itemDescription = description;
     self.lastUpdated = lastUpdated;
@@ -154,11 +145,45 @@
     [self loadCoffeeItemDetail];
 }
 
-- (void)didReceiveMemoryWarning
+- (void)viewDidLayoutSubviews
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [super viewDidLayoutSubviews];
+    
+    [((UIScrollView*)self.view) setContentSize:CGSizeMake(CGRectGetWidth(self.view.frame), CGRectGetMaxY(self.lastUpdated.frame) + 15)];
 }
+
+#pragma mark - Instance methods
+
+- (void)loadCoffeeItemDetail
+{
+    [self.activityIndicator startAnimating];
+    
+    __weak CoffeeCardViewController *weakSelf = self;
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager.requestSerializer setValue:@"WuVbkuUsCXHPx3hsQzus4SE" forHTTPHeaderField:@"Authorization"];
+    [manager GET:[NSString stringWithFormat:@"https://coffeeapi.percolate.com/api/coffee/%@", weakSelf.coffeeItem.id] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        weakSelf.itemDescription.text = responseObject[@"desc"];
+        
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+        [dateFormatter setLocale:[NSLocale currentLocale]];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        
+        // Example Date: 2014-10-04 01:44:49.285430
+        NSString *dateString = responseObject[@"last_updated_at"];
+        NSRange rangeForChar = [dateString rangeOfString:@"."];
+        dateString = (rangeForChar.location != NSNotFound) ? [dateString substringToIndex:rangeForChar.location] : dateString;
+        
+        weakSelf.lastUpdated.text = [[dateFormatter dateFromString:dateString] lastUpdatedString];
+        
+        [weakSelf.activityIndicator stopAnimating];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Failed to make detailed request for coffee entity");
+    }];
+}
+
+#pragma mark - Custom event handlers
 
 - (void)shareSelected:(id)sender
 {
