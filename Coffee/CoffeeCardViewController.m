@@ -38,8 +38,6 @@
 
 @interface CoffeeCardViewController ()
 
-@property (nonatomic, strong) UIScrollView *contentView;
-
 @property (nonatomic, strong) UILabel *itemDescription;
 @property (nonatomic, strong) UILabel *lastUpdated;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
@@ -127,7 +125,6 @@
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView]|" options:0 metrics:0 views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[contentView]|" options:0 metrics:0 views:views]];
     
-    self.contentView = contentView;
     self.itemDescription = description;
     self.lastUpdated = lastUpdated;
     

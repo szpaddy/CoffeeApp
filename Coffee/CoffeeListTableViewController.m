@@ -12,6 +12,8 @@
 #import "CoffeeCardViewController.h"
 #import "CoffeeCard+Utility.h"
 
+static NSString *CellIdentifier = @"CoffeeCardCellIdentifier";
+
 @interface CoffeeListTableViewController ()
 
 @property (nonatomic, strong) CoffeeListTableViewCell *dummyCell;
@@ -49,6 +51,9 @@
     [super viewDidLoad];
     
     [self loadCoffeeRecipies];
+
+    [self.tableView registerClass:[CoffeeListTableViewCell class] forCellReuseIdentifier:CellIdentifier];
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[self imageWithImage:[UIImage imageNamed:@"drip.png"] convertToSize:CGSizeMake(70, 70)]];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Test" style:UIBarButtonItemStylePlain target:self action:@selector(test)];
@@ -57,12 +62,6 @@
 - (void)test
 {
     [self.tableView reloadData];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)configureCell:(CoffeeListTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
@@ -88,11 +87,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"CoffeeCardCellIdentifier";
-    
-    [tableView registerClass:[CoffeeListTableViewCell class] forCellReuseIdentifier:CellIdentifier];
     CoffeeListTableViewCell *cell = (CoffeeListTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
+    [cell setNeedsUpdateConstraints];
+    [cell updateConstraintsIfNeeded];
+    
     return cell;
 }
 
@@ -100,22 +99,41 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 200;
-//    CoffeeCard *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
-//
-//    // Fill the dummy cell just like the one at indexpath would appear so we can calulate the proper cell height
-//    if (!self.dummyCell)
-//        self.dummyCell = [[CoffeeListTableViewCell alloc] init];
-//
-//    self.dummyCell.textLabel.text = object.name;
-//    self.dummyCell.detailTextLabel.text = object.desc;
-//    self.dummyCell.imageView.image = [UIImage imageWithData:object.imageData];
-//
-//    // Force the content to layout
-//    [self.dummyCell setNeedsLayout];
-//    [self.dummyCell layoutIfNeeded];
-//    
-//    return [self.dummyCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+    CoffeeCard *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
+
+    // Fill the dummy cell just like the one at indexpath would appear so we can calulate the proper cell height
+    if (!self.dummyCell)
+        self.dummyCell = [[CoffeeListTableViewCell alloc] init];
+
+    self.dummyCell.textLabel.text = object.name;
+    self.dummyCell.detailTextLabel.text = object.desc;
+    self.dummyCell.imageView.image = [UIImage imageWithData:object.imageData];
+
+    // Force the content to layout with custom constraints created in updateConstraints
+    [self.dummyCell setNeedsUpdateConstraints];
+    [self.dummyCell updateConstraintsIfNeeded];
+    
+    // Set the width of the cell to match the width of the table view. This is important so that we'll get the
+    // correct cell height for different table view widths if the cell's height depends on its width (due to
+    // multi-line UILabels word wrapping, etc). We don't need to do this above in -[tableView:cellForRowAtIndexPath]
+    // because it happens automatically when the cell is used in the table view.
+    // Also note, the final width of the cell may not be the width of the table view in some cases, for example when a
+    // section index is displayed along the right side of the table view. You must account for the reduced cell width.
+    self.dummyCell.bounds = CGRectMake(0.0f, 0.0f, CGRectGetWidth(tableView.bounds), CGRectGetHeight(self.dummyCell.bounds));
+    
+    // Do the layout pass on the cell, which will calculate the frames for all the views based on the constraints.
+    // (Note that you must set the preferredMaxLayoutWidth on multi-line UILabels inside the -[layoutSubviews] method
+    // of the UITableViewCell subclass, or do it manually at this point before the below 2 lines!)
+    [self.dummyCell setNeedsLayout];
+    [self.dummyCell layoutIfNeeded];
+    
+    // Get the actual height required for the cell's contentView
+    CGFloat height = [self.dummyCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+    
+    // Add an extra point to the height to account for the cell separator, which is added between the bottom
+    // of the cell's contentView and the bottom of the table view cell.
+    height += 1.0f;
+    return height;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -165,7 +183,7 @@
     
     return _fetchedResultsController;
 }
-
+/*
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
     [self.tableView beginUpdates];
@@ -187,8 +205,8 @@
             break;
             
         case NSFetchedResultsChangeUpdate:
-            //[self configureCell:(CoffeeListTableViewCell*)[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
-            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [self configureCell:(CoffeeListTableViewCell*)[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+            //[self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
             
         case NSFetchedResultsChangeMove:
@@ -201,9 +219,9 @@
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
     [self.tableView endUpdates];
-}
+}*/
 
-/*
+
  // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed.
  
  - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
@@ -211,7 +229,7 @@
  // In the simplest, most efficient, case, reload the table view.
  [self.tableView reloadData];
  }
- */
+
 
 
 @end

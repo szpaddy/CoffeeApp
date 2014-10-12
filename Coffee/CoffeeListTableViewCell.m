@@ -12,6 +12,8 @@
 
 @property (nonatomic, getter=didAddConstraints) BOOL addedConstraints;
 
+@property (nonatomic, strong) NSLayoutConstraint *dynamicHeightConstraint;
+
 @property (nonatomic, strong) UILabel *customTextLabel;
 @property (nonatomic, strong) UILabel *customDetailTextLabel;
 @property (nonatomic, strong) UIImageView *lowerImageView;
@@ -20,82 +22,82 @@
 
 @implementation CoffeeListTableViewCell
 
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        [self setupCell];
-    }
-    return self;
-}
-
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
-    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        [self setupCell];
+        UILabel *customTextLabel = [[UILabel alloc] init];
+        UILabel *customDetailTextLabel = [[UILabel alloc] init];
+        UIImageView *lowerImageView = [[UIImageView alloc] init];
+        
+        customTextLabel.numberOfLines = 0;
+        customDetailTextLabel.numberOfLines = 0;
+        
+        customTextLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.bounds);
+        customDetailTextLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.bounds);
+        
+        customTextLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        lowerImageView.translatesAutoresizingMaskIntoConstraints = NO;
+        customDetailTextLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        
+        lowerImageView.contentMode = UIViewContentModeScaleAspectFit;
+        customTextLabel.font = [UIFont fontWithName:@"AppleSDGothicNeo-Light" size:18];
+        customDetailTextLabel.font = [UIFont fontWithName:@"AppleSDGothicNeo-Light" size:13];
+        
+        [self.contentView addSubview:customTextLabel];
+        [self.contentView addSubview:customDetailTextLabel];
+        [self.contentView addSubview:lowerImageView];
+        
+        self.customTextLabel = customTextLabel;
+        self.customDetailTextLabel = customDetailTextLabel;
+        self.lowerImageView = lowerImageView;
     }
     return self;
 }
 
 - (void)updateConstraints
 {
-    if (self.didAddConstraints)
-    {
-        [self.contentView removeConstraints:[self.contentView constraints]];
-        self.addedConstraints = NO;
-    }
-    
     UILabel *customTextLabel = self.customTextLabel;
     UILabel *customDetailTextLabel = self.customDetailTextLabel;
     UIImageView *lowerImageView = self.lowerImageView;
     
-    CGFloat width = (CGRectGetWidth(self.bounds) - 30.0);
+    CGFloat width = 230;
     CGFloat scale = width/lowerImageView.image.size.width;
     CGFloat imageHeight = (lowerImageView.image) ? lowerImageView.image.size.height * scale : 0;
     
+    if (self.didAddConstraints)
+    {
+        self.dynamicHeightConstraint.constant = imageHeight;
+        [super updateConstraints];
+        return;
+    }
+    
     NSDictionary *views = NSDictionaryOfVariableBindings(customTextLabel, customDetailTextLabel, lowerImageView);
     NSDictionary *metrics = @{ @"imageHeight" : @(imageHeight),
-                               @"paddingHeight" : @5 ,
-                               @"paddingWidth" : @15 ,
-                               @"width" : @(CGRectGetWidth(self.contentView.bounds) - 150)
+                               @"width" : @(width),
+                               @"padding" : @15 ,
                                };
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-paddingWidth-[customTextLabel(width)]-paddingWidth-|" options:0 metrics:metrics views:views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-paddingWidth-[customDetailTextLabel(width)]-paddingWidth-|" options:0 metrics:metrics views:views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-paddingWidth-[lowerImageView(<=width)]-paddingWidth-|" options:0 metrics:metrics views:views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-paddingHeight-[customTextLabel]-2-[customDetailTextLabel]-paddingHeight-[lowerImageView(imageHeight)]" options:0 metrics:metrics views:views]];
-
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[customTextLabel]-padding-|" options:0 metrics:metrics views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[customDetailTextLabel]-padding-|" options:0 metrics:metrics views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[lowerImageView(<=width)]" options:0 metrics:metrics views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[customTextLabel]-[customDetailTextLabel]-[lowerImageView]-|" options:0 metrics:metrics views:views]];
+    
+    // Add height constraint to lowerImageView and save as an instance varaible so the we can resize the content view if an image is added after the cells creation
+    NSLayoutConstraint *dynamicHeightConstraint = [NSLayoutConstraint constraintWithItem:lowerImageView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
+    [self.contentView addConstraint:dynamicHeightConstraint];
+    self.dynamicHeightConstraint = dynamicHeightConstraint;
+    
     self.addedConstraints = YES;
     [super updateConstraints];
 }
 
-- (void)setupCell
+- (void)layoutSubviews
 {
-    UILabel *customTextLabel = [[UILabel alloc] init];
-    UILabel *customDetailTextLabel = [[UILabel alloc] init];
-    UIImageView *lowerImageView = [[UIImageView alloc] init];
-
-    lowerImageView.backgroundColor = [UIColor blueColor];
-    lowerImageView.contentMode = UIViewContentModeScaleAspectFit;
-    customTextLabel.font = [UIFont fontWithName:@"AppleSDGothicNeo-Light" size:18];
-    customDetailTextLabel.font = [UIFont fontWithName:@"AppleSDGothicNeo-Light" size:13];
-    
-    self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.contentView addSubview:customTextLabel];
-    [self.contentView addSubview:customDetailTextLabel];
-    [self.contentView addSubview:lowerImageView];
-    
-    customTextLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    lowerImageView.translatesAutoresizingMaskIntoConstraints = NO;
-    customDetailTextLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    self.customTextLabel = customTextLabel;
-    self.customDetailTextLabel = customDetailTextLabel;
-    self.lowerImageView = lowerImageView;
-    
-    [self setNeedsUpdateConstraints];
+    [self.contentView setNeedsLayout];
+    [self.contentView layoutIfNeeded];
 }
+
 
 - (UILabel *)textLabel
 {
@@ -106,7 +108,7 @@
 {
     return _customDetailTextLabel;
 }
-
+  
 - (UIImageView *)imageView
 {
     return _lowerImageView;
