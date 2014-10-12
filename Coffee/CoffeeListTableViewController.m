@@ -100,21 +100,22 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CoffeeCard *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
-
-    // Fill the dummy cell just like the one at indexpath would appear so we can calulate the proper cell height
-    if (!self.dummyCell)
-        self.dummyCell = [[CoffeeListTableViewCell alloc] init];
-
-    self.dummyCell.textLabel.text = object.name;
-    self.dummyCell.detailTextLabel.text = object.desc;
-    self.dummyCell.imageView.image = [UIImage imageWithData:object.imageData];
-
-    // Force the content to layout
-    [self.dummyCell setNeedsLayout];
-    [self.dummyCell layoutIfNeeded];
-    
-    return [self.dummyCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+    return 200;
+//    CoffeeCard *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
+//
+//    // Fill the dummy cell just like the one at indexpath would appear so we can calulate the proper cell height
+//    if (!self.dummyCell)
+//        self.dummyCell = [[CoffeeListTableViewCell alloc] init];
+//
+//    self.dummyCell.textLabel.text = object.name;
+//    self.dummyCell.detailTextLabel.text = object.desc;
+//    self.dummyCell.imageView.image = [UIImage imageWithData:object.imageData];
+//
+//    // Force the content to layout
+//    [self.dummyCell setNeedsLayout];
+//    [self.dummyCell layoutIfNeeded];
+//    
+//    return [self.dummyCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

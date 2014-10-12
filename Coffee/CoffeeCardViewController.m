@@ -38,6 +38,8 @@
 
 @interface CoffeeCardViewController ()
 
+@property (nonatomic, strong) UIScrollView *contentView;
+
 @property (nonatomic, strong) UILabel *itemDescription;
 @property (nonatomic, strong) UILabel *lastUpdated;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
@@ -48,29 +50,27 @@
 
 #pragma mark - View lifecycle 
 
-- (void)loadView
-{
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
-    self.view = scrollView;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
     
+    UIScrollView *contentView = [[UIScrollView alloc] init];
+    contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:contentView];
+    
     // Instantiate and initialize subviews
     UILabel *title = [[UILabel alloc] init];
     title.translatesAutoresizingMaskIntoConstraints = NO;
     title.font = [UIFont fontWithName:@"AppleSDGothicNeo-Light" size:32];
     title.text = self.coffeeItem.name;
-    [self.view addSubview:title];
+    [contentView addSubview:title];
     
     UIView *line = [[UIView alloc] init];
     line.translatesAutoresizingMaskIntoConstraints = NO;
     line.backgroundColor = [UIColor grayColor];
-    [self.view addSubview:line];
+    [contentView addSubview:line];
     
     UILabel *description = [[UILabel alloc] init];
     description.translatesAutoresizingMaskIntoConstraints = NO;
@@ -78,22 +78,22 @@
     description.numberOfLines = 0;
     description.preferredMaxLayoutWidth = CGRectGetWidth(self.view.bounds) - 15.0; // This is necessary to allow the label to use multi-line text properly
     description.text = self.coffeeItem.desc;
-    [self.view addSubview:description];
+    [contentView addSubview:description];
     
     UILabel *lastUpdated = [[UILabel alloc] init];
     lastUpdated.translatesAutoresizingMaskIntoConstraints = NO;
     lastUpdated.font = [UIFont fontWithName:@"HelveticaNeue-LightItalic" size:14];
-    [self.view addSubview:lastUpdated];
+    [contentView addSubview:lastUpdated];
     
     UIImageView *imageView = [[UIImageView alloc] init];
     imageView.translatesAutoresizingMaskIntoConstraints = NO;
     imageView.contentMode = UIViewContentModeScaleAspectFit;
     imageView.image = [UIImage imageWithData:self.coffeeItem.imageData];
-    [self.view addSubview:imageView];
+    [contentView addSubview:imageView];
     
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.activityIndicator.center = self.view.center;
-    [self.view addSubview:self.activityIndicator];
+    [contentView addSubview:self.activityIndicator];
     
     // Auto Layout subviews
 
@@ -103,26 +103,31 @@
     CGFloat scale = width/imageView.image.size.width;
     CGFloat imageHeight = (imageView.image) ? imageView.image.size.height * scale : 0;
 
-    NSDictionary *views = NSDictionaryOfVariableBindings(title, line, description, imageView, lastUpdated);
+    NSDictionary *views = NSDictionaryOfVariableBindings(title, line, description, imageView, lastUpdated, contentView);
     NSDictionary *metrics = @{ @"padding" : @15.0,
                                @"width" : @(width),
                                @"imageHeight" : @(imageHeight),
-                               @"lineWidth" : @((CGRectGetWidth(self.view.bounds) - 15.0)),
                                @"lineThickness" : @2 };
 
     // All subviews should be padding px away from the left edge of the superview
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[title(width)]" options:NSLayoutFormatAlignAllLeft metrics:metrics views:views]];
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[title]-padding-|" options:0 metrics:metrics views:views]];
 
     // Set line to be line width px wide and lineHeight px high
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[line(lineWidth)]" options:NSLayoutFormatAlignAllLeft metrics:metrics views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[description(width)]" options:NSLayoutFormatAlignAllLeft metrics:metrics views:views]];
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[line]|" options:0 metrics:metrics views:views]];
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[description]-padding-|" options:0 metrics:metrics views:views]];
     
     // Set imageView tobe <=imageEdge in length and height, so if imageView.image == nil then the lastUpdated uilabel will shift up to be underneath the description label
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[imageView(<=width)]" options:NSLayoutFormatAlignAllLeft metrics:metrics views:views]];
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[imageView(width)]-padding-|" options:0 metrics:metrics views:views]];
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[lastUpdated]-padding-|" options:0 metrics:metrics views:views]];
     
     // Vertically align all components one after the other with padding px as the space between them.
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-padding-[title]-padding-[line(lineThickness)]-padding-[description]-padding-[imageView(imageHeight)]-padding-[lastUpdated]" options:NSLayoutFormatAlignAllLeft metrics:metrics views:views]];
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[title]-padding-[line(lineThickness)]-padding-[description]-padding-[imageView(imageHeight)]-padding-[lastUpdated]-padding-|" options:0 metrics:metrics views:views]];
     
+    // Keep the content scrollviews frame to be that of self.view
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView]|" options:0 metrics:0 views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[contentView]|" options:0 metrics:0 views:views]];
+    
+    self.contentView = contentView;
     self.itemDescription = description;
     self.lastUpdated = lastUpdated;
     
@@ -143,13 +148,6 @@
     
     // Fetch additional details about this coffee item such as the last time the page was updated and a detailed description
     [self loadCoffeeItemDetail];
-}
-
-- (void)viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-    
-    [((UIScrollView*)self.view) setContentSize:CGSizeMake(CGRectGetWidth(self.view.frame), CGRectGetMaxY(self.lastUpdated.frame) + 15)];
 }
 
 #pragma mark - Instance methods
