@@ -124,6 +124,8 @@
 			children = (
 				5D4EBD5719E7148400B18677 /* AppDelegate.h */,
 				5D4EBD5819E7148400B18677 /* AppDelegate.m */,
+				5D62EF6219EB78AE007B4688 /* CoffeeNavigationController.h */,
+				5D62EF6319EB78AE007B4688 /* CoffeeNavigationController.m */,
 				5D9FC98219EB34D0008A589D /* Models */,
 				5D9FC98119EB34B5008A589D /* View Controllers */,
 				5D9FC98019EB349C008A589D /* Views */,
@@ -181,8 +183,6 @@
 				5D4EBD5E19E7148400B18677 /* CoffeeListTableViewController.m */,
 				5D0952D319E7576700419D29 /* CoffeeCardViewController.h */,
 				5D0952D419E7576700419D29 /* CoffeeCardViewController.m */,
-				5D62EF6219EB78AE007B4688 /* CoffeeNavigationController.h */,
-				5D62EF6319EB78AE007B4688 /* CoffeeNavigationController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
