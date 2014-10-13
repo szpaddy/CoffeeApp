@@ -24,16 +24,15 @@ NSString * const CoffeeDetailLastUpdatedString = @"last_updated_at";
 
 - (NSString *)lastUpdatedString
 {
-    // Get conversion to months, days, hours, minutes
-    NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSDayCalendarUnit | NSMonthCalendarUnit;
+    NSUInteger unitFlags = NSYearCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSDayCalendarUnit | NSMonthCalendarUnit;
     
-    NSDateComponents *breakdownInfo = [[NSCalendar currentCalendar] components:unitFlags fromDate:[NSDate date]  toDate:self  options:0];
+    NSDateComponents *breakdownInfo = [[NSCalendar currentCalendar] components:unitFlags fromDate:self toDate:[NSDate date] options:0];
     if (breakdownInfo.year >= 1)
-        [NSString stringWithFormat:@"Updated %ldi %@ ago", (long)breakdownInfo.year, (breakdownInfo.year > 1 ? @"years" : @"year")];
+        return [NSString stringWithFormat:@"Updated %ld %@ ago", (long)breakdownInfo.year, (breakdownInfo.year > 1 ? @"years" : @"year")];
     else if (breakdownInfo.month >= 1)
-        [NSString stringWithFormat:@"Updated %ldi %@ ago", (long)breakdownInfo.month, (breakdownInfo.month > 1 ? @"months" : @"month")];
+        return [NSString stringWithFormat:@"Updated %ld %@ ago", (long)breakdownInfo.month, (breakdownInfo.month > 1 ? @"months" : @"month")];
     else if (breakdownInfo.day >= 1)
-        [NSString stringWithFormat:@"Updated %ldi %@ ago", (long)breakdownInfo.day, (breakdownInfo.day > 1 ? @"days" : @"day")];
+        return [NSString stringWithFormat:@"Updated %ld %@ ago", (long)breakdownInfo.day, (breakdownInfo.day > 1 ? @"days" : @"day")];
     
     return @"Updated less then a day ago";
 }
@@ -44,7 +43,7 @@ NSString * const CoffeeDetailLastUpdatedString = @"last_updated_at";
 
 @property (nonatomic, strong) UILabel *itemDescription;
 @property (nonatomic, strong) UILabel *lastUpdated;
-@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, strong) UIActivityIndicatorView *activityView;
 
 @end
 
@@ -58,9 +57,13 @@ NSString * const CoffeeDetailLastUpdatedString = @"last_updated_at";
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    UIScrollView *contentView = [[UIScrollView alloc] init];
+    UIScrollView* scrollView = [[UIScrollView alloc] init];
+    scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:scrollView];
+    
+    UIView* contentView = [[UIView alloc] init];
     contentView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addSubview:contentView];
+    [scrollView addSubview:contentView];
     
     // Instantiate and initialize subviews
     UILabel *title = [[UILabel alloc] init];
@@ -90,12 +93,13 @@ NSString * const CoffeeDetailLastUpdatedString = @"last_updated_at";
     UIImageView *imageView = [[UIImageView alloc] init];
     imageView.translatesAutoresizingMaskIntoConstraints = NO;
     imageView.contentMode = UIViewContentModeScaleAspectFit;
+    imageView.backgroundColor = [UIColor redColor];
     imageView.image = [UIImage imageWithData:self.coffeeItem.imageData];
     [contentView addSubview:imageView];
     
-    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    self.activityIndicator.center = self.view.center;
-    [contentView addSubview:self.activityIndicator];
+    self.activityView = [[UIActivityIndicatorView alloc] initWithFrame:self.view.frame];
+    self.activityView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    [contentView addSubview:self.activityView];
     
     // Auto Layout subviews
 
@@ -105,7 +109,8 @@ NSString * const CoffeeDetailLastUpdatedString = @"last_updated_at";
     CGFloat scale = width/imageView.image.size.width;
     CGFloat imageHeight = (imageView.image) ? imageView.image.size.height * scale : 0;
 
-    NSDictionary *views = NSDictionaryOfVariableBindings(title, line, description, imageView, lastUpdated, contentView);
+    UIView *mainView = self.view;
+    NSDictionary *views = NSDictionaryOfVariableBindings(title, line, description, imageView, lastUpdated, contentView, scrollView, mainView);
     NSDictionary *metrics = @{ @"padding" : @(DefaultAutoLayoutPadding),
                                @"width" : @(width),
                                @"imageHeight" : @(imageHeight),
@@ -118,17 +123,23 @@ NSString * const CoffeeDetailLastUpdatedString = @"last_updated_at";
     [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[line]|" options:0 metrics:metrics views:views]];
     [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[description]-padding-|" options:0 metrics:metrics views:views]];
     
-    // Set imageView tobe <=imageEdge in length and height, so if imageView.image == nil then the lastUpdated uilabel will shift up to be underneath the description label
-    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[imageView(width)]-padding-|" options:0 metrics:metrics views:views]];
+    // Set imageView tobe <=width in length and height, so the image will shrink its width in the event that there would be leftover space on the left and right sides
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[imageView(<=width)]" options:0 metrics:metrics views:views]];
     [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[lastUpdated]-padding-|" options:0 metrics:metrics views:views]];
     
     // Vertically align all components one after the other with padding px as the space between them.
-    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-padding-[title]-padding-[line(lineThickness)]-padding-[description]-padding-[imageView(imageHeight)]-padding-[lastUpdated]-padding-|" options:0 metrics:metrics views:views]];
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-padding-[title]-padding-[line(lineThickness)]-padding-[description]-padding-[imageView(<=imageHeight)]-padding-[lastUpdated]-padding-|" options:0 metrics:metrics views:views]];
     
-    // Keep the content scrollviews frame to be that of self.view
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView]|" options:0 metrics:0 views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[contentView]|" options:0 metrics:0 views:views]];
+    // AutoLayout is notorious for not working well with UIScrollViews. These constraints will pin the backing views to eachother
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[scrollView]|" options:0 metrics:0 views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView]|" options:0 metrics:0 views:views]];
     
+    [scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView]|" options:0 metrics:0 views:views]];
+    [scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[contentView]|" options:0 metrics:0 views:views]];
+    
+    // This will make the contentView equal to the main view, otherwise when rotating the contentView will not expand
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentView(==mainView)]" options:0 metrics:0 views:views]];
+        
     self.itemDescription = description;
     self.lastUpdated = lastUpdated;
     
@@ -152,11 +163,18 @@ NSString * const CoffeeDetailLastUpdatedString = @"last_updated_at";
     [self loadCoffeeItemDetail];
 }
 
+#pragma mark - Rotation
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
 #pragma mark - Instance methods
 
 - (void)loadCoffeeItemDetail
 {
-    [self.activityIndicator startAnimating];
+    [self.activityView startAnimating];
     
     __weak CoffeeCardViewController *weakSelf = self;
     
@@ -177,9 +195,10 @@ NSString * const CoffeeDetailLastUpdatedString = @"last_updated_at";
         
         weakSelf.lastUpdated.text = [[dateFormatter dateFromString:dateString] lastUpdatedString];
         
-        [weakSelf.activityIndicator stopAnimating];
+        [weakSelf.activityView stopAnimating];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Failed to make detailed request for coffee entity");
+        NSLog(@"Failed to make detailed request for coffee entity: %@", error);
+        [weakSelf.activityView stopAnimating];
     }];
 }
 

@@ -15,7 +15,10 @@ NSString * const CoffeeItemDescriptionString = @"desc";
 
 @implementation CoffeeCard (Utility)
 
-+ (CoffeeCard*)coffeeCardWithInfo:(NSDictionary*)coffeeInfo inManagedObjectContext:(NSManagedObjectContext*)context
+// This method queries the database for an object with a matching unique identifier.
+// If one exists it returns that object.
+// If none exist we create a new object, insert it into the db and return it.
++ (CoffeeCard*)coffeeCardWithInfo:(NSDictionary*)coffeeInfo inManagedObjectContext:(NSManagedObjectContext*)context 
 {
     CoffeeCard *coffeeCard = nil;
     

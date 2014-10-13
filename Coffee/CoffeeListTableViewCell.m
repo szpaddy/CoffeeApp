@@ -93,7 +93,7 @@ const CGFloat DefaultAutoLayoutCellPadding = 15.0f;
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[customDetailTextLabel]-padding-|" options:0 metrics:metrics views:views]];
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[lowerImageView(<=width)]" options:0 metrics:metrics views:views]];
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[separatorLine]|" options:0 metrics:metrics views:views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[customTextLabel]-[customDetailTextLabel]-[lowerImageView]-[separatorLine(separatorThickness)]-|" options:0 metrics:metrics views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[customTextLabel]-[customDetailTextLabel]-[lowerImageView]-[separatorLine(separatorThickness)]|" options:0 metrics:metrics views:views]];
     
     // Add height constraint to lowerImageView and save as an instance varaible so the we can resize the content view if an image is added after the cells creation
     NSLayoutConstraint *dynamicHeightConstraint = [NSLayoutConstraint constraintWithItem:lowerImageView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:imageHeight];

@@ -16,7 +16,8 @@ static NSString *CellIdentifier = @"CoffeeCardCellIdentifier";
 
 @interface CoffeeListTableViewController ()
 
-@property (nonatomic, strong) CoffeeListTableViewCell *dummyCell; // Use this cell to calculate the height of a cell
+@property (nonatomic, strong) CoffeeListTableViewCell *dummyCell; // Use this cell to calculate the height of the cell that would be displayed at that indexPath
+@property (nonatomic, strong) UIActivityIndicatorView *activityView;
 
 @end
 
@@ -26,36 +27,31 @@ static NSString *CellIdentifier = @"CoffeeCardCellIdentifier";
 {
     __weak CoffeeListTableViewController *weakSelf = self;
     
+    [self.activityView startAnimating];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager.requestSerializer setValue:@"WuVbkuUsCXHPx3hsQzus4SE" forHTTPHeaderField:@"Authorization"];
     [manager GET:@"https://coffeeapi.percolate.com/api/coffee/" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [(NSArray *)responseObject enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {            
             [CoffeeCard coffeeCardWithInfo:obj inManagedObjectContext:weakSelf.managedObjectContext];
         }];
+        [weakSelf.activityView stopAnimating];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
+        NSLog(@"Error when attempting to download latest coffee items: %@", error);
+        [weakSelf.activityView stopAnimating];
     }];
-}
-
-- (UIImage *)imageWithImage:(UIImage *)image convertToSize:(CGSize)size
-{
-    UIGraphicsBeginImageContext(size);
-    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
-    UIImage *destImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return destImage;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.activityView = [[UIActivityIndicatorView alloc] initWithFrame:self.view.frame];
+    self.activityView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    [self.view addSubview:self.activityView];
     
-    //[self loadCoffeeRecipies];
+    [self loadCoffeeRecipies]; // Refresh with newest content
 
     [self.tableView registerClass:[CoffeeListTableViewCell class] forCellReuseIdentifier:CellIdentifier];
-    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[self imageWithImage:[UIImage imageNamed:@"drip.png"] convertToSize:CGSizeMake(70, 70)]];
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];    
 }
 
 - (void)configureCell:(CoffeeListTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
@@ -64,6 +60,11 @@ static NSString *CellIdentifier = @"CoffeeCardCellIdentifier";
     cell.textLabel.text = object.name;
     cell.detailTextLabel.text = object.desc;
     cell.imageView.image = [UIImage imageWithData:object.imageData];
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDataSource

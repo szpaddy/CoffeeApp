@@ -9,6 +9,8 @@
 #import "CoffeeCard.h"
 #import <AFNetworking/AFHTTPRequestOperationManager.h>
 #import <AFNetworking/AFURLResponseSerialization.h>
+#import <NSObject+RACPropertySubscribing.h>
+#import <ReactiveCocoa/RACSignal.h>
 
 @implementation CoffeeCard
 
@@ -21,45 +23,28 @@
 - (void)awakeFromFetch
 {
     [super awakeFromFetch];
-    
-    [self observeImageUrl];
+        
+    [RACObserve(self, image_url) subscribeNext:^(id x) {
+        // When the image_url changes asynchronously start a new download for the image
+        [self downloadImageData:x];
+    }];
 }
 
 - (void)awakeFromInsert
 {
     [super awakeFromInsert];
     
-    [self observeImageUrl];
-}
-
-- (void)willTurnIntoFault
-{
-    [super willTurnIntoFault];
-    
-    [self removeObserver:self forKeyPath:@"image_url"];
-}
-
-- (void)observeImageUrl
-{
-    [self addObserver:self forKeyPath:@"image_url" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:NULL];
-}
-
-// When the image_url changes asynchronously start a new download for the image
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if ([keyPath isEqualToString:@"image_url"])
-    {
-        NSString *oldValue = [change objectForKey:NSKeyValueChangeOldKey];
-        NSString *newValue = [change objectForKey:NSKeyValueChangeNewKey];
-        if (newValue && ![newValue isEqualToString:@""] && ![newValue isEqualToString:oldValue])
-        {
-            [self downloadImageData:newValue];
-        }
-    }
+    [RACObserve(self, image_url) subscribeNext:^(id x) {
+        // When the image_url changes asynchronously start a new download for the image
+        [self downloadImageData:x];
+    }];
 }
 
 - (void)downloadImageData:(NSString*)imageUrl
 {
+    if (!imageUrl || [imageUrl isEqualToString:@""])
+        return;
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.responseSerializer = [AFImageResponseSerializer serializer];
     [manager GET:imageUrl parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {

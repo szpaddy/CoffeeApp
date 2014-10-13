@@ -7,6 +7,8 @@
 //
 
 #import "AppDelegate.h"
+#import "CoffeeNavigationController.h"
+#import "CoffeeNavigationBar.h"
 #import "CoffeeListTableViewController.h"
 
 @interface AppDelegate ()
@@ -15,6 +17,9 @@
 
 @implementation AppDelegate
 
+- (void)presentSplashScreen
+{
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -22,10 +27,8 @@
     CoffeeListTableViewController *tvc = [[CoffeeListTableViewController alloc] init];
     tvc.managedObjectContext = self.managedObjectContext;
     
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tvc];
-    navigationController.navigationBar.translucent = NO;
-    navigationController.navigationBar.barTintColor = [UIColor colorWithRed:0.949 green:0.4 blue:0.13 alpha:0.0];
-    
+    CoffeeNavigationController *navigationController = [[CoffeeNavigationController alloc] initWithNavigationBarClass:[CoffeeNavigationBar class] toolbarClass:nil];
+    [navigationController pushViewController:tvc animated:NO]; // push root view controller
     self.window.rootViewController = navigationController;
     
     return YES;

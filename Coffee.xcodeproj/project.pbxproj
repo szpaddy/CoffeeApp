@@ -10,8 +10,6 @@
 		241306FE7F52790E55B71F2D /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 50102559BEE0249B73FAFC03 /* libPods.a */; };
 		5D0952D519E7576700419D29 /* CoffeeCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D0952D419E7576700419D29 /* CoffeeCardViewController.m */; };
 		5D0952D819E76FE800419D29 /* CoffeeListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D0952D719E76FE800419D29 /* CoffeeListTableViewCell.m */; };
-		5D3CF2A419E799910052B1B3 /* drip.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D3CF2A319E799910052B1B3 /* drip.png */; };
-		5D3CF2A619E79A8E0052B1B3 /* drip2.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D3CF2A519E79A8E0052B1B3 /* drip2.png */; };
 		5D4EBD5619E7148400B18677 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D4EBD5519E7148400B18677 /* main.m */; };
 		5D4EBD5919E7148400B18677 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D4EBD5819E7148400B18677 /* AppDelegate.m */; };
 		5D4EBD5C19E7148400B18677 /* Coffee.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5D4EBD5A19E7148400B18677 /* Coffee.xcdatamodeld */; };
@@ -20,8 +18,11 @@
 		5D4EBD6419E7148400B18677 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5D4EBD6319E7148400B18677 /* Images.xcassets */; };
 		5D4EBD6719E7148400B18677 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5D4EBD6519E7148400B18677 /* LaunchScreen.xib */; };
 		5D4EBD7319E7148400B18677 /* CoffeeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D4EBD7219E7148400B18677 /* CoffeeTests.m */; };
+		5D62EF6419EB78AE007B4688 /* CoffeeNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D62EF6319EB78AE007B4688 /* CoffeeNavigationController.m */; };
 		5D9BF0CD19E8442100D998AA /* CoffeeCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D9BF0CC19E8442100D998AA /* CoffeeCard.m */; };
 		5D9BF0D019E844D300D998AA /* CoffeeCard+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D9BF0CF19E844D300D998AA /* CoffeeCard+Utility.m */; };
+		5D9FC97C19EB2F41008A589D /* Drip.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D9FC97B19EB2F41008A589D /* Drip.png */; };
+		5D9FC98619EB3D73008A589D /* CoffeeNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D9FC98519EB3D73008A589D /* CoffeeNavigationBar.m */; };
 		5DA24B3D19E79F540021CF00 /* CoffeeLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DA24B3C19E79F540021CF00 /* CoffeeLogo.png */; };
 		7387E908E88D67A6D241DD06 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 50102559BEE0249B73FAFC03 /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -44,8 +45,6 @@
 		5D0952D419E7576700419D29 /* CoffeeCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoffeeCardViewController.m; sourceTree = "<group>"; };
 		5D0952D619E76FE800419D29 /* CoffeeListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoffeeListTableViewCell.h; sourceTree = "<group>"; };
 		5D0952D719E76FE800419D29 /* CoffeeListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoffeeListTableViewCell.m; sourceTree = "<group>"; };
-		5D3CF2A319E799910052B1B3 /* drip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drip.png; sourceTree = "<group>"; };
-		5D3CF2A519E79A8E0052B1B3 /* drip2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drip2.png; sourceTree = "<group>"; };
 		5D4EBD5019E7148400B18677 /* Coffee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Coffee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D4EBD5419E7148400B18677 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5D4EBD5519E7148400B18677 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -60,10 +59,15 @@
 		5D4EBD6C19E7148400B18677 /* CoffeeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoffeeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D4EBD7119E7148400B18677 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5D4EBD7219E7148400B18677 /* CoffeeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoffeeTests.m; sourceTree = "<group>"; };
+		5D62EF6219EB78AE007B4688 /* CoffeeNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoffeeNavigationController.h; sourceTree = "<group>"; };
+		5D62EF6319EB78AE007B4688 /* CoffeeNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoffeeNavigationController.m; sourceTree = "<group>"; };
 		5D9BF0CB19E8442100D998AA /* CoffeeCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoffeeCard.h; sourceTree = SOURCE_ROOT; };
 		5D9BF0CC19E8442100D998AA /* CoffeeCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoffeeCard.m; sourceTree = SOURCE_ROOT; };
 		5D9BF0CE19E844D300D998AA /* CoffeeCard+Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CoffeeCard+Utility.h"; sourceTree = "<group>"; };
 		5D9BF0CF19E844D300D998AA /* CoffeeCard+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CoffeeCard+Utility.m"; sourceTree = "<group>"; };
+		5D9FC97B19EB2F41008A589D /* Drip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Drip.png; sourceTree = "<group>"; };
+		5D9FC98419EB3D73008A589D /* CoffeeNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoffeeNavigationBar.h; sourceTree = "<group>"; };
+		5D9FC98519EB3D73008A589D /* CoffeeNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoffeeNavigationBar.m; sourceTree = "<group>"; };
 		5DA24B3C19E79F540021CF00 /* CoffeeLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CoffeeLogo.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -118,21 +122,12 @@
 		5D4EBD5219E7148400B18677 /* Coffee */ = {
 			isa = PBXGroup;
 			children = (
-				5D3CF2A319E799910052B1B3 /* drip.png */,
-				5D3CF2A519E79A8E0052B1B3 /* drip2.png */,
-				5DA24B3C19E79F540021CF00 /* CoffeeLogo.png */,
 				5D4EBD5719E7148400B18677 /* AppDelegate.h */,
 				5D4EBD5819E7148400B18677 /* AppDelegate.m */,
-				5D4EBD5D19E7148400B18677 /* CoffeeListTableViewController.h */,
-				5D4EBD5E19E7148400B18677 /* CoffeeListTableViewController.m */,
-				5D0952D619E76FE800419D29 /* CoffeeListTableViewCell.h */,
-				5D0952D719E76FE800419D29 /* CoffeeListTableViewCell.m */,
-				5D0952D319E7576700419D29 /* CoffeeCardViewController.h */,
-				5D0952D419E7576700419D29 /* CoffeeCardViewController.m */,
-				5D9BF0CB19E8442100D998AA /* CoffeeCard.h */,
-				5D9BF0CC19E8442100D998AA /* CoffeeCard.m */,
-				5D9BF0CE19E844D300D998AA /* CoffeeCard+Utility.h */,
-				5D9BF0CF19E844D300D998AA /* CoffeeCard+Utility.m */,
+				5D9FC98219EB34D0008A589D /* Models */,
+				5D9FC98119EB34B5008A589D /* View Controllers */,
+				5D9FC98019EB349C008A589D /* Views */,
+				5D9FC98319EB3569008A589D /* Images */,
 				5D4EBD6019E7148400B18677 /* Main.storyboard */,
 				5D4EBD6319E7148400B18677 /* Images.xcassets */,
 				5D4EBD6519E7148400B18677 /* LaunchScreen.xib */,
@@ -166,6 +161,50 @@
 				5D4EBD7119E7148400B18677 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5D9FC98019EB349C008A589D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5D0952D619E76FE800419D29 /* CoffeeListTableViewCell.h */,
+				5D0952D719E76FE800419D29 /* CoffeeListTableViewCell.m */,
+				5D9FC98419EB3D73008A589D /* CoffeeNavigationBar.h */,
+				5D9FC98519EB3D73008A589D /* CoffeeNavigationBar.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		5D9FC98119EB34B5008A589D /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				5D4EBD5D19E7148400B18677 /* CoffeeListTableViewController.h */,
+				5D4EBD5E19E7148400B18677 /* CoffeeListTableViewController.m */,
+				5D0952D319E7576700419D29 /* CoffeeCardViewController.h */,
+				5D0952D419E7576700419D29 /* CoffeeCardViewController.m */,
+				5D62EF6219EB78AE007B4688 /* CoffeeNavigationController.h */,
+				5D62EF6319EB78AE007B4688 /* CoffeeNavigationController.m */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		5D9FC98219EB34D0008A589D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5D9BF0CB19E8442100D998AA /* CoffeeCard.h */,
+				5D9BF0CC19E8442100D998AA /* CoffeeCard.m */,
+				5D9BF0CE19E844D300D998AA /* CoffeeCard+Utility.h */,
+				5D9BF0CF19E844D300D998AA /* CoffeeCard+Utility.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		5D9FC98319EB3569008A589D /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				5D9FC97B19EB2F41008A589D /* Drip.png */,
+				5DA24B3C19E79F540021CF00 /* CoffeeLogo.png */,
+			);
+			name = Images;
 			sourceTree = "<group>";
 		};
 		BF0B06C7D774591CCC18C269 /* Pods */ = {
@@ -230,6 +269,7 @@
 				TargetAttributes = {
 					5D4EBD4F19E7148400B18677 = {
 						CreatedOnToolsVersion = 6.0.1;
+						DevelopmentTeam = 9336WA96Z9;
 					};
 					5D4EBD6B19E7148400B18677 = {
 						CreatedOnToolsVersion = 6.0.1;
@@ -264,8 +304,7 @@
 				5DA24B3D19E79F540021CF00 /* CoffeeLogo.png in Resources */,
 				5D4EBD6219E7148400B18677 /* Main.storyboard in Resources */,
 				5D4EBD6719E7148400B18677 /* LaunchScreen.xib in Resources */,
-				5D3CF2A619E79A8E0052B1B3 /* drip2.png in Resources */,
-				5D3CF2A419E799910052B1B3 /* drip.png in Resources */,
+				5D9FC97C19EB2F41008A589D /* Drip.png in Resources */,
 				5D4EBD6419E7148400B18677 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -352,9 +391,11 @@
 				5D9BF0CD19E8442100D998AA /* CoffeeCard.m in Sources */,
 				5D0952D519E7576700419D29 /* CoffeeCardViewController.m in Sources */,
 				5D4EBD5919E7148400B18677 /* AppDelegate.m in Sources */,
+				5D62EF6419EB78AE007B4688 /* CoffeeNavigationController.m in Sources */,
 				5D4EBD5C19E7148400B18677 /* Coffee.xcdatamodeld in Sources */,
 				5D4EBD5F19E7148400B18677 /* CoffeeListTableViewController.m in Sources */,
 				5D4EBD5619E7148400B18677 /* main.m in Sources */,
+				5D9FC98619EB3D73008A589D /* CoffeeNavigationBar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,6 +522,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -493,6 +535,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
