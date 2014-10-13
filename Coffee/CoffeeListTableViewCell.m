@@ -9,6 +9,7 @@
 #import "CoffeeListTableViewCell.h"
 
 const CGFloat DefaultAutoLayoutCellPadding = 15.0f;
+const CGFloat DefaultAutoLayoutCellWidth = 230.0f; // Preferred width, will be resized if its bigger then actual image width
 
 @interface CoffeeListTableViewCell ()
 
@@ -70,7 +71,7 @@ const CGFloat DefaultAutoLayoutCellPadding = 15.0f;
     UIImageView *lowerImageView = self.lowerImageView;
     UIView *separatorLine = self.separatorLine;
     
-    CGFloat width = 230;
+    CGFloat width = DefaultAutoLayoutCellWidth;
     CGFloat scale = width/lowerImageView.image.size.width;
     CGFloat imageHeight = (lowerImageView.image) ? lowerImageView.image.size.height * scale : 0;
     

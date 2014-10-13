@@ -43,7 +43,7 @@
         self.barTintColor = [UIColor colorWithRed:0.949 green:0.4 blue:0.13 alpha:0.0];
         
         // Add a logo to the navigation bar and center it using autolayout
-        UIImageView *titleImage = [UIImageView imageViewWithImage:[UIImage imageNamed:@"Drip"] andSize:CGSizeMake(35, 40)];
+        UIImageView *titleImage = [UIImageView imageViewWithImage:[UIImage imageNamed:@"WhiteDrip"] andSize:CGSizeMake(35, 40)];
         [self addSubview:titleImage];
         self.titleImage = titleImage;
     }
